@@ -4,14 +4,14 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="testing.example.com.codesprint.MainActivity">
+    tools:context="testing.example.com.codesprint.Mapper">
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="260dp"
-        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ar" />
 
     <EditText
@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:hint="Enter the text here" />
+        android:layout_marginTop="40dp"
+        android:hint="Enter Name of country" />
 
     <TextView
         android:id="@+id/score"
@@ -44,14 +44,34 @@
         android:text="NEXT" />
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/skipBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="24dp"
-        android:text="SUBMIT" />
+        android:text="Skip" />
 
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/submit_button_text" />
+
+    <ImageButton
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="320dp"
+        android:layout_toRightOf="@id/txt"
+        android:background="@android:color/transparent"
+        android:src="@drawable/info"
+        android:text="@string/info_button_text" />
 
 </RelativeLayout>
