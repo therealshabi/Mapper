@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class SplashScreen extends AppCompatActivity {
     private void StartAnimations() {
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha);
         anim.reset();
-        RelativeLayout l = (RelativeLayout) findViewById(R.id.activity_splash_screen);
+        LinearLayout l = (LinearLayout) findViewById(R.id.activity_splash_screen);
         l.clearAnimation();
         l.startAnimation(anim);
 

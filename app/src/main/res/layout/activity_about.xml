@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context="testing.example.com.codesprint.About">
 
     <ImageView
         android:id="@+id/appLogo"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:layout_marginTop="20dp"
         android:src="@drawable/ic_flag" />
 
     <TextView
         android:id="@+id/appName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:textSize="44sp"
+        android:layout_marginTop="20dp"
         android:fontFamily="cursive"
+        android:text="@string/app_name"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:layout_below="@id/appLogo"/>
+        android:textSize="44sp" />
 
     <TextView
         android:id="@+id/aboutText"
         android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:fontFamily="sans-serif"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:textSize="15sp"
-        android:textColor="#FFFFFF"
-        android:autoLink="web"
-        android:layout_below="@id/appName"
         android:layout_marginTop="8dp"
-        android:text="@string/about_text"/>
+        android:fontFamily="sans-serif"
+        android:text="@string/about_text"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp" />
 
-</RelativeLayout>
+</LinearLayout>

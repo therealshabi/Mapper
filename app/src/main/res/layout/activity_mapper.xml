@@ -6,93 +6,101 @@
     android:fillViewport="true"
     tools:context="testing.example.com.codesprint.Mapper">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/activity_mapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/headerTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif"
             android:text="@string/headerTitleFlag"
+            android:textAlignment="center"
             android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="260dp"
-            android:layout_below="@id/headerTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ar" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/au" />
 
-        <EditText
-            android:id="@+id/txt"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:hint="Enter Name of country" />
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_centerHorizontal="true"
+                android:hint="Enter Name of the country" />
+
+            <ImageButton
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/info"
+                android:text="@string/info_button_text" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/score"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txt"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
             android:text="Score : 0"
+            android:textAlignment="center"
             android:textColor="#000000" />
 
-        <Button
-            android:id="@+id/nextBtn"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="24dp"
-            android:text="NEXT" />
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/skipBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="24dp"
-            android:text="Skip" />
+            <Button
+                android:id="@+id/skipBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Skip" />
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/submit_button_text" />
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="4dp"
+                android:text="@string/submit_button_text" />
 
-        <ImageButton
-            android:id="@+id/info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="348dp"
-            android:layout_toRightOf="@id/txt"
-            android:background="@android:color/transparent"
-            android:src="@drawable/info"
-            android:text="@string/info_button_text" />
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/nextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:text="NEXT" />
 
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 </ScrollView>
