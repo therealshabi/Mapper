@@ -248,6 +248,7 @@ public class Mapper extends AppCompatActivity {
                 mSubmit.setEnabled(Boolean.FALSE);
                 skipBtn.setEnabled(Boolean.FALSE);
                 nextBtn.setEnabled(Boolean.TRUE);
+                keysAsArray.remove(key);
                 Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG).show();
 
             }
@@ -277,7 +278,7 @@ public class Mapper extends AppCompatActivity {
                         else
                             score += 5 - penaltyTime;
 
-                    } else if (getCode(key).equals(getCode(ans))) {
+                    } else if (getCode(key).equals(getCode(ans)) && ans.length() > 1) {
                         Toast.makeText(getBaseContext(), "Almost Correct Answer!", Toast.LENGTH_SHORT).show();
                         keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
