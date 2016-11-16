@@ -12,7 +12,9 @@
             android:name=".Mapper"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".SplashScreen">
+        <activity android:name=".SplashScreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +24,10 @@
         <activity
             android:name=".GovtOrg"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Intermediate"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

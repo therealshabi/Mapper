@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_intermediate"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="testing.example.com.codesprint.Intermediate">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:fontFamily="cursive"
+        android:text="@string/category_text"
+        android:textSize="32dp" />
+
+    <Button
+        android:id="@+id/flags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
+        android:background="@drawable/category_selector"
+        android:elevation="8dp"
+        android:foreground="@drawable/ripple"
+        android:padding="16dp"
+        android:text="@string/flags_category"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/govt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/category_selector"
+        android:elevation="8dp"
+        android:foreground="@drawable/ripple"
+        android:padding="16dp"
+        android:text="@string/organisations_category"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/govt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/category_selector"
+        android:elevation="8dp"
+        android:foreground="@drawable/ripple"
+        android:padding="16dp"
+        android:text="@string/about_category"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

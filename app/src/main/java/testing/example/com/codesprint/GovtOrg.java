@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +19,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 
-public class GovtOrg extends AppCompatActivity {
+public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitListener {
     EditText mText;
     TextView mScore;
     Button nextBtn;
@@ -35,11 +38,17 @@ public class GovtOrg extends AppCompatActivity {
     HashMap<String, String> infos = new HashMap<>();
     ArrayList<String> keysAsArray;
 
+    private TextToSpeech tts;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_govt_org);
+
+        tts = new TextToSpeech(this, this);
+        tts.setLanguage(Locale.UK);
+        tts.setSpeechRate(0.7f);
 
         mText = (EditText) findViewById(R.id.txt);
         mScore = (TextView) findViewById(R.id.score);
@@ -187,6 +196,7 @@ public class GovtOrg extends AppCompatActivity {
                 nextBtn.setEnabled(Boolean.TRUE);
                 keysAsArray.remove(key);
                 Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG).show();
+                speakOut("Correct Answer was " + key);
 
             }
         });
@@ -202,7 +212,7 @@ public class GovtOrg extends AppCompatActivity {
 
                 double elapsedSeconds = tDelta / 2000.0;
 
-                if (ans != "" || ans != " ") {
+                if (!ans.equals("") && !ans.equals(" ")) {
                     if (key.equalsIgnoreCase(ans) || (tempKey.equalsIgnoreCase(ans) && tempKey.length() > 1)) {
                         Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_LONG).show();
                         keysAsArray.remove(key);
@@ -213,6 +223,8 @@ public class GovtOrg extends AppCompatActivity {
                             score += 10 - ((int) elapsedSeconds + penaltyTime);
                         else
                             score += 5 - penaltyTime;
+
+                        speakOut("Good! Correct Answer is " + key);
 
                     } else if (getCode(key).equalsIgnoreCase(getCode(ans)) || key.contains(ans) && ans.length() > 1) {
                         Toast.makeText(getBaseContext(), "Almost Correct Answer!", Toast.LENGTH_SHORT).show();
@@ -225,8 +237,11 @@ public class GovtOrg extends AppCompatActivity {
                         else
                             score += 4 - penaltyTime;
 
+                        speakOut("Almost! Correct Answer is " + key);
+
                     } else {
                         Toast.makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT).show();
+                        speakOut("Hard Luck, Try Again!");
                         score += -1;
                         if (penaltyTime < 4)
                             penaltyTime++;
@@ -251,7 +266,6 @@ public class GovtOrg extends AppCompatActivity {
 
     public static String getCode(String s) {
         char[] x = s.toUpperCase().toCharArray();
-
 
         char firstLetter = x[0];
 
@@ -321,6 +335,28 @@ public class GovtOrg extends AppCompatActivity {
         //Pad with 0's or truncate
         output = output + "0000";
         return output.substring(0, 4);
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            int result = tts.setLanguage(Locale.UK);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "This Language is not supported");
+            } else {
+                speakOut("");
+            }
+
+        } else {
+            Log.e("TTS", "Initialization Failed!");
+        }
+
+    }
+
+    private void speakOut(String text) {
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 }

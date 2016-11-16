@@ -4,4 +4,8 @@
     <string name="info_button_text">Info</string>
     <string name="headerTitleLogo">IDENTIFY THE ORGANISATION</string>
     <string name="headerTitleFlag">IDENTIFY THE FLAG</string>
+    <string name="flags_category">Flags</string>
+    <string name="organisations_category">Organisations</string>
+    <string name="about_category">About</string>
+    <string name="category_text">Choose Your Category</string>
 </resources>

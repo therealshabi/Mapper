@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +19,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 
-public class Mapper extends AppCompatActivity {
+public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitListener {
     EditText mText;
     TextView mScore;
     Button nextBtn;
@@ -35,6 +38,9 @@ public class Mapper extends AppCompatActivity {
     HashMap<String, String> infos = new HashMap<>();
     ArrayList<String> keysAsArray;
 
+    private TextToSpeech tts;
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,10 @@ public class Mapper extends AppCompatActivity {
         logo = (ImageView) findViewById(R.id.logo);
         mSubmit = (Button) findViewById(R.id.submit);
         final Random generator = new Random();
+
+        tts = new TextToSpeech(this, this);
+        tts.setLanguage(Locale.UK);
+        tts.setSpeechRate(0.7f);
 
         logos.put("Andorra", getDrawable(R.drawable.ad));
         infos.put("Andorra", "Capital: Andorra la Vella\n" +
@@ -250,6 +260,7 @@ public class Mapper extends AppCompatActivity {
                 nextBtn.setEnabled(Boolean.TRUE);
                 keysAsArray.remove(key);
                 Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG).show();
+                speakOut("Correct Answer was " + key);
 
             }
         });
@@ -266,7 +277,7 @@ public class Mapper extends AppCompatActivity {
 
                 double elapsedSeconds = tDelta / 2000.0;
 
-                if (ans != "" || ans != " ") {
+                if (!ans.equals("") && !ans.equals(" ")) {
                     if (key.equalsIgnoreCase(ans) || (tempKey.equalsIgnoreCase(ans) && tempKey.length() > 1)) {
                         Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_LONG).show();
                         mSubmit.setEnabled(Boolean.FALSE);
@@ -278,6 +289,8 @@ public class Mapper extends AppCompatActivity {
                         else
                             score += 5 - penaltyTime;
 
+                        speakOut("Good! Correct Answer is " + key);
+
                     } else if (getCode(key).equals(getCode(ans)) && ans.length() > 1) {
                         Toast.makeText(getBaseContext(), "Almost Correct Answer!", Toast.LENGTH_SHORT).show();
                         keysAsArray.remove(key);
@@ -288,20 +301,21 @@ public class Mapper extends AppCompatActivity {
                             score += 9 - ((int) elapsedSeconds + penaltyTime);
                         else
                             score += 4 - penaltyTime;
+                        speakOut("Almost! Correct Answer is " + key);
 
                     } else {
                         Toast.makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT).show();
                         score += -1;
                         if (penaltyTime < 4)
                             penaltyTime++;
+                        speakOut("Hard Luck, Try Again!");
+
                     }
                 } else {
                     Toast.makeText(getBaseContext(), "Please provide a valid input", Toast.LENGTH_SHORT).show();
 
                 }
                 mScore.setText("Score : " + score);
-
-
             }
         });
 
@@ -385,4 +399,26 @@ public class Mapper extends AppCompatActivity {
         return output.substring(0, 4);
     }
 
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            int result = tts.setLanguage(Locale.UK);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "This Language is not supported");
+            } else {
+                speakOut("");
+            }
+
+        } else {
+            Log.e("TTS", "Initialization Failed!");
+        }
+
+    }
+
+    private void speakOut(String text) {
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+
+    }
 }
