@@ -1,6 +1,9 @@
 package testing.example.com.codesprint;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +20,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+
+import static testing.example.com.codesprint.R.drawable.ad;
+import static testing.example.com.codesprint.R.drawable.ae;
+import static testing.example.com.codesprint.R.drawable.af;
+import static testing.example.com.codesprint.R.drawable.al;
+import static testing.example.com.codesprint.R.drawable.am;
+import static testing.example.com.codesprint.R.drawable.ao;
+import static testing.example.com.codesprint.R.drawable.ar;
+import static testing.example.com.codesprint.R.drawable.at;
+import static testing.example.com.codesprint.R.drawable.au;
+import static testing.example.com.codesprint.R.drawable.az;
+import static testing.example.com.codesprint.R.drawable.bb;
+import static testing.example.com.codesprint.R.drawable.bd;
+import static testing.example.com.codesprint.R.drawable.be;
+import static testing.example.com.codesprint.R.drawable.br;
+import static testing.example.com.codesprint.R.drawable.bt;
+import static testing.example.com.codesprint.R.drawable.ca;
+import static testing.example.com.codesprint.R.drawable.ch;
+import static testing.example.com.codesprint.R.drawable.cn;
+import static testing.example.com.codesprint.R.drawable.cy;
 
 public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitListener {
     EditText mText;
@@ -60,56 +84,89 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.7f);
 
-        logos.put("Andorra", getDrawable(R.drawable.ad));
+        Bitmap temp = ((BitmapDrawable)getDrawable(ad)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ad = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Andorra", ad);
         infos.put("Andorra", "Capital: Andorra la Vella\n" +
                 "Dialing code: +376\n" +
                 "Currency: Euro\n" +
                 "Population: 79,218 (2013) World Bank\n" +
                 "Official language: Catalan");
 
-        logos.put("United Arab Emirates", getDrawable(R.drawable.ae));
+        temp = ((BitmapDrawable)getDrawable(ae)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ae = new BitmapDrawable(getResources(),temp);
+
+        logos.put("United Arab Emirates", ae);
         infos.put("United Arab Emirates", "Capital: Abu Dhabi\n" +
                 "Dialing code: +971\n" +
                 "Currency: United Arab Emirates dirham\n" +
                 "Population: 9.346 million (2013) World Bank\n" +
                 "President: Khalifa bin Zayed Al Nahyan");
-        logos.put("Afghanistan", getDrawable(R.drawable.af));
+
+        temp = ((BitmapDrawable)getDrawable(af)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable af = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Afghanistan", af);
         infos.put("Afghanistan", "Capital: Kabul\n" +
                 "Currency: Afghan afghani\n" +
                 "President: Ashraf Ghani\n" +
                 "Population: 30.55 million (2013) World Bank\n" +
                 "Official languages: Pashto, Dari");
 
-        logos.put("Albania", getDrawable(R.drawable.al));
+        temp = ((BitmapDrawable)getDrawable(al)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable al = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Albania", al);
         infos.put("Albania", "Capital: Tirana\n" +
                 "Dialing code: +355\n" +
                 "Currency: Albanian lek\n" +
                 "President: Bujar Nishani\n" +
                 "Population: 2.774 million (2013) World Bank");
 
+        temp = ((BitmapDrawable)getDrawable(ar)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ar = new BitmapDrawable(getResources(),temp);
 
-        logos.put("Argentina", getDrawable(R.drawable.ar));
+
+        logos.put("Argentina", ar);
         infos.put("Argentina", "Capital: Buenos Aires\n" +
                 "Dialing code: +54\n" +
                 "Currency: Argentine peso\n" +
                 "President: Mauricio Macri\n" +
                 "Population: 41.45 million (2013)");
 
-        logos.put("Australia", getDrawable(R.drawable.au));
+        temp = ((BitmapDrawable)getDrawable(au)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable au = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Australia", au);
         infos.put("Australia", "Capital: Canberra\n" +
                 "Dialing code: +61\n" +
                 "Currency: Australian dollar\n" +
                 "Population: 23.13 million (2013) World Bank\n" +
                 "Prime minister: Malcolm Turnbull");
 
-        logos.put("Armenia", getDrawable(R.drawable.am));
+        temp = ((BitmapDrawable)getDrawable(am)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable am = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Armenia", am);
         infos.put("Armenia", "Capital: Yerevan\n" +
                 "Dialing code: +374\n" +
                 "Continent: Asia\n" +
                 "Population: 2.977 million (2013) World Bank\n" +
                 "Currencies: Noah's Ark silver coins, Armenian dram");
 
-        logos.put("Angola", getDrawable(R.drawable.ao));
+        temp = ((BitmapDrawable)getDrawable(ao)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ao = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Angola", ao);
         infos.put("Angola", "Capital: Luanda\n" +
                 "Dialing code: +244\n" +
                 "Currency: Angolan kwanza\n" +
@@ -117,28 +174,44 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                 "Population: 21.47 million (2013) World Bank\n" +
                 "Official language: Portuguese");
 
-        logos.put("Austria", getDrawable(R.drawable.at));
+        temp = ((BitmapDrawable)getDrawable(at)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable at = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Austria", at);
         infos.put("Austria", "Capital: Vienna\n" +
                 "Dialing code: +43\n" +
                 "Currency: Euro\n" +
                 "Population: 8.474 million (2013) World Bank\n" +
                 "Official languages: German, Hungarian, Slovenian, Austrian German");
 
-        logos.put("Azerbaijan", getDrawable(R.drawable.az));
+        temp = ((BitmapDrawable)getDrawable(az)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable az = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Azerbaijan", az);
         infos.put("Azerbaijan", "Capital: Baku\n" +
                 "Dialing code: +994\n" +
                 "Currency: Azerbaijani manat\n" +
                 "Population: 9.417 million (2013) World Bank\n" +
                 "Official language: Azerbaijani");
 
-        logos.put("Barbados", getDrawable(R.drawable.bb));
+        temp = ((BitmapDrawable)getDrawable(bb)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable bb = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Barbados", bb);
         infos.put("Barbados", "Capital: Bridgetown\n" +
                 "Dialing code: +1\n" +
                 "Currency: Barbadian dollar\n" +
                 "Continent: North America\n" +
                 "Official language: English");
 
-        logos.put("Bangladesh", getDrawable(R.drawable.bd));
+        temp = ((BitmapDrawable)getDrawable(bd)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable bd = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Bangladesh", bd);
         infos.put("Bangladesh", "Capital: Dhaka\n" +
                 "Dialing code: +880\n" +
                 "Currency: Bangladeshi taka\n" +
@@ -146,14 +219,22 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                 "Population: 156.6 million (2013) World Bank\n" +
                 "President: Abdul Hamid");
 
-        logos.put("Belgium", getDrawable(R.drawable.be));
+        temp = ((BitmapDrawable)getDrawable(be)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable be = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Belgium", be);
         infos.put("Belgium", "Capital: City of Brussels\n" +
                 "Dialing code: +32\n" +
                 "Currency: Euro\n" +
                 "Population: 11.2 million (2013) World Bank\n" +
                 "Official languages: French, Dutch, German");
 
-        logos.put("Brazil", getDrawable(R.drawable.br));
+        temp = ((BitmapDrawable)getDrawable(br)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable br = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Brazil", br);
         infos.put("Brazil", "Capital: Brasília\n" +
                 "Dialing code: +55\n" +
                 "Currency: Brazilian real\n" +
@@ -161,33 +242,56 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                 "Population: 200.4 million (2013) World Bank\n" +
                 "Official language: Portuguese");
 
-        logos.put("Bhutan", getDrawable(R.drawable.bt));
+        temp = ((BitmapDrawable)getDrawable(bt)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable bt = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Bhutan", bt);
         infos.put("Bhutan", "Capital: Thimphu\n" +
                 "King: Jigme Khesar Namgyel Wangchuck\n" +
                 "Prime minister: Tshering Tobgay\n" +
                 "Currencies: Bhutanese ngultrum, Indian rupee\n" +
                 "Official language: Dzongkha");
 
-        logos.put("Canada", getDrawable(R.drawable.ca));
+        temp = ((BitmapDrawable)getDrawable(ca)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ca = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Canada", ca);
         infos.put("Canada", "Capital: Ottawa\n" +
                 "Dialing code: +1\n" +
                 "Currency: Canadian dollar\n" +
                 "Population: 35.16 million (2013) World Bank\n" +
                 "Prime minister: Justin Trudeau\n" +
                 "Provinces: Ontario, British Columbia, Québec, Alberta, more");
-        logos.put("Switzerland", getDrawable(R.drawable.ch));
+
+        temp = ((BitmapDrawable)getDrawable(ch)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable ch = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Switzerland", ch);
         infos.put("Switzerland", "Dialing code: +41\n" +
                 "Currency: Swiss franc\n" +
                 "Population: 8.081 million (2013) World Bank\n" +
                 "Official languages: French, Romansh, German, Italian\n" +
                 "Colleges and Universities: ETH Zurich, more");
-        logos.put("Cyprus", getDrawable(R.drawable.cy));
+
+        temp = ((BitmapDrawable)getDrawable(cy)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable cy = new BitmapDrawable(getResources(),temp);
+
+        logos.put("Cyprus", cy);
         infos.put("Cyprus", "Capital: Nicosia\n" +
                 "Dialing code: +357\n" +
                 "Currency: Euro\n" +
                 "Official languages: Turkish, Greek\n" +
                 "Colleges and Universities: University of Cyprus, more");
-        logos.put("China", getDrawable(R.drawable.cn));
+
+        temp = ((BitmapDrawable)getDrawable(cn)).getBitmap();
+        temp = Bitmap.createScaledBitmap(temp,800,600,false);
+        Drawable cn = new BitmapDrawable(getResources(),temp);
+
+        logos.put("China", cn);
         infos.put("China", "Capital: Beijing\n" +
                 "Dialing code: +86\n" +
                 "Currency: Renminbi\n" +
@@ -228,8 +332,17 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     mSubmit.setEnabled(Boolean.TRUE);
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
-                    //Start an activity
-                }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
+                    builder.setMessage("Congratulation! You have finished the Quiz").setCancelable(false).
+                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(Mapper.this,Intermediate.class));
+                                }
+                            });
+                    speakOut("Congratulation! You have finished the Quiz");
+                    AlertDialog alert = builder.create();
+                    alert.show();                }
 
             }
         });
@@ -420,5 +533,11 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
     private void speakOut(String text) {
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

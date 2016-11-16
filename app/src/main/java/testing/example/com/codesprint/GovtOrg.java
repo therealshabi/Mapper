@@ -1,6 +1,7 @@
 package testing.example.com.codesprint;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+
+import static testing.example.com.codesprint.R.drawable.se;
 
 public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitListener {
     EditText mText;
@@ -166,7 +169,17 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     mSubmit.setEnabled(Boolean.TRUE);
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
-                    //Start an activity
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GovtOrg.this);
+                    builder.setMessage("Congratulation! You have finished the Quiz").setCancelable(false).
+                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(GovtOrg.this,Intermediate.class));
+                                }
+                            });
+                    speakOut("Congratulation! You have finished the Quiz");
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
 
             }

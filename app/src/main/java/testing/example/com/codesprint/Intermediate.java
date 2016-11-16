@@ -38,7 +38,7 @@ public class Intermediate extends AppCompatActivity {
         mAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+               startActivity(new Intent(Intermediate.this, About.class));
             }
         });
     }
