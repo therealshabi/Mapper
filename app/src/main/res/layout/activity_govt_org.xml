@@ -9,7 +9,8 @@
     <RelativeLayout
         android:id="@+id/activity_govt_org"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/headerTitle"
@@ -39,7 +40,7 @@
             android:layout_below="@id/logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            android:hint="Enter Name of country" />
+            android:hint="Enter Name of Organisation" />
 
         <TextView
             android:id="@+id/score"
@@ -86,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="344dp"
+            android:layout_marginTop="348dp"
             android:layout_toRightOf="@id/txt"
             android:background="@android:color/transparent"
             android:src="@drawable/info"

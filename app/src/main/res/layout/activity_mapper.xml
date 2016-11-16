@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="344dp"
+            android:layout_marginTop="348dp"
             android:layout_toRightOf="@id/txt"
             android:background="@android:color/transparent"
             android:src="@drawable/info"
