@@ -2,4 +2,6 @@
     <string name="app_name">Mapper</string>
     <string name="submit_button_text">SUBMIT</string>
     <string name="info_button_text">Info</string>
+    <string name="headerTitleLogo">IDENTIFY THE ORGANISATION</string>
+    <string name="headerTitleFlag">IDENTIFY THE FLAG</string>
 </resources>

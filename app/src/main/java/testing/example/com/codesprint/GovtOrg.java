@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Mapper extends AppCompatActivity {
+public class GovtOrg extends AppCompatActivity {
     EditText mText;
     TextView mScore;
     Button nextBtn;
@@ -39,7 +39,7 @@ public class Mapper extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mapper);
+        setContentView(R.layout.activity_govt_org);
 
         mText = (EditText) findViewById(R.id.txt);
         mScore = (TextView) findViewById(R.id.score);
@@ -50,154 +50,139 @@ public class Mapper extends AppCompatActivity {
         mSubmit = (Button) findViewById(R.id.submit);
         final Random generator = new Random();
 
-        logos.put("Andorra", getDrawable(R.drawable.ad));
-        infos.put("Andorra", "Capital: Andorra la Vella\n" +
+        logos.put("Delhi Metro", getDrawable(R.drawable.metro));
+        infos.put("Delhi Metro", "Capital: Andorra la Vella\n" +
                 "Dialing code: +376\n" +
                 "Currency: Euro\n" +
                 "Population: 79,218 (2013) World Bank\n" +
                 "Official language: Catalan");
 
-        logos.put("United Arab Emirates", getDrawable(R.drawable.ae));
-        infos.put("United Arab Emirates", "Capital: Abu Dhabi\n" +
+        logos.put("Airport Authority of India", getDrawable(R.drawable.airport_authority_of_india));
+        infos.put("Airport Authority of India", "Capital: Abu Dhabi\n" +
                 "Dialing code: +971\n" +
                 "Currency: United Arab Emirates dirham\n" +
                 "Population: 9.346 million (2013) World Bank\n" +
                 "President: Khalifa bin Zayed Al Nahyan");
-        logos.put("Afghanistan", getDrawable(R.drawable.af));
-        infos.put("Afghanistan", "Capital: Kabul\n" +
+        logos.put("PETA", getDrawable(R.drawable.peta));
+        infos.put("PETA", "Capital: Kabul\n" +
                 "Currency: Afghan afghani\n" +
                 "President: Ashraf Ghani\n" +
                 "Population: 30.55 million (2013) World Bank\n" +
                 "Official languages: Pashto, Dari");
 
-        logos.put("Albania", getDrawable(R.drawable.al));
-        infos.put("Albania", "Capital: Tirana\n" +
+        logos.put("Indian Army", getDrawable(R.drawable.army));
+        infos.put("Indian Army", "Capital: Tirana\n" +
                 "Dialing code: +355\n" +
                 "Currency: Albanian lek\n" +
                 "President: Bujar Nishani\n" +
                 "Population: 2.774 million (2013) World Bank");
 
 
-        logos.put("Argentina", getDrawable(R.drawable.ar));
-        infos.put("Argentina", "Capital: Buenos Aires\n" +
+        logos.put("Make In India", getDrawable(R.drawable.makeinindia));
+        infos.put("Make In India", "Capital: Buenos Aires\n" +
                 "Dialing code: +54\n" +
                 "Currency: Argentine peso\n" +
                 "President: Mauricio Macri\n" +
                 "Population: 41.45 million (2013)");
 
-        logos.put("Australia", getDrawable(R.drawable.au));
-        infos.put("Australia", "Capital: Canberra\n" +
+        logos.put("UGC", getDrawable(R.drawable.ugc));
+        infos.put("UGC", "Capital: Canberra\n" +
                 "Dialing code: +61\n" +
                 "Currency: Australian dollar\n" +
                 "Population: 23.13 million (2013) World Bank\n" +
                 "Prime minister: Malcolm Turnbull");
 
-        logos.put("Armenia", getDrawable(R.drawable.am));
+        logos.put("Aadhar", getDrawable(R.drawable.aadhar));
         infos.put("Armenia", "Capital: Yerevan\n" +
                 "Dialing code: +374\n" +
                 "Continent: Asia\n" +
                 "Population: 2.977 million (2013) World Bank\n" +
                 "Currencies: Noah's Ark silver coins, Armenian dram");
 
-        logos.put("Angola", getDrawable(R.drawable.ao));
-        infos.put("Angola", "Capital: Luanda\n" +
+        logos.put("Air India", getDrawable(R.drawable.air));
+        infos.put("Air India", "Capital: Luanda\n" +
                 "Dialing code: +244\n" +
                 "Currency: Angolan kwanza\n" +
                 "President: José Eduardo dos Santos\n" +
                 "Population: 21.47 million (2013) World Bank\n" +
                 "Official language: Portuguese");
 
-        logos.put("Austria", getDrawable(R.drawable.at));
-        infos.put("Austria", "Capital: Vienna\n" +
+        logos.put("Indian Air Force", getDrawable(R.drawable.airforce));
+        infos.put("Indian Air Force", "Capital: Vienna\n" +
                 "Dialing code: +43\n" +
                 "Currency: Euro\n" +
                 "Population: 8.474 million (2013) World Bank\n" +
                 "Official languages: German, Hungarian, Slovenian, Austrian German");
 
-        logos.put("Azerbaijan", getDrawable(R.drawable.az));
-        infos.put("Azerbaijan", "Capital: Baku\n" +
+        logos.put("Sarva Shiksha Abhiyan", getDrawable(R.drawable.shiksha));
+        infos.put("Sarva Shiksha Abhiyan", "Capital: Baku\n" +
                 "Dialing code: +994\n" +
                 "Currency: Azerbaijani manat\n" +
                 "Population: 9.417 million (2013) World Bank\n" +
                 "Official language: Azerbaijani");
 
-        logos.put("Barbados", getDrawable(R.drawable.bb));
-        infos.put("Barbados", "Capital: Bridgetown\n" +
+        logos.put("BSNL", getDrawable(R.drawable.bsnl));
+        infos.put("BSNL", "Capital: Bridgetown\n" +
                 "Dialing code: +1\n" +
                 "Currency: Barbadian dollar\n" +
                 "Continent: North America\n" +
                 "Official language: English");
 
-        logos.put("Bangladesh", getDrawable(R.drawable.bd));
-        infos.put("Bangladesh", "Capital: Dhaka\n" +
+        logos.put("ISRO", getDrawable(R.drawable.isro));
+        infos.put("ISRO", "Capital: Dhaka\n" +
                 "Dialing code: +880\n" +
                 "Currency: Bangladeshi taka\n" +
                 "Prime minister: Sheikh Hasina\n" +
                 "Population: 156.6 million (2013) World Bank\n" +
                 "President: Abdul Hamid");
 
-        logos.put("Belgium", getDrawable(R.drawable.be));
-        infos.put("Belgium", "Capital: City of Brussels\n" +
+        logos.put("Swatch Bharat", getDrawable(R.drawable.swatch));
+        infos.put("Swatch Bharat", "Capital: City of Brussels\n" +
                 "Dialing code: +32\n" +
                 "Currency: Euro\n" +
                 "Population: 11.2 million (2013) World Bank\n" +
                 "Official languages: French, Dutch, German");
 
-        logos.put("Brazil", getDrawable(R.drawable.br));
-        infos.put("Brazil", "Capital: Brasília\n" +
+        logos.put("Digital India", getDrawable(R.drawable.digital_india_logo_small));
+        infos.put("Digital India", "Capital: Brasília\n" +
                 "Dialing code: +55\n" +
                 "Currency: Brazilian real\n" +
                 "President: Michel Temer\n" +
                 "Population: 200.4 million (2013) World Bank\n" +
                 "Official language: Portuguese");
 
-        logos.put("Bhutan", getDrawable(R.drawable.bt));
-        infos.put("Bhutan", "Capital: Thimphu\n" +
+        logos.put("Lion Capital", getDrawable(R.drawable.emblem1));
+        infos.put("Lion Capital", "Capital: Thimphu\n" +
                 "King: Jigme Khesar Namgyel Wangchuck\n" +
                 "Prime minister: Tshering Tobgay\n" +
                 "Currencies: Bhutanese ngultrum, Indian rupee\n" +
                 "Official language: Dzongkha");
 
-        logos.put("Canada", getDrawable(R.drawable.ca));
+        logos.put("Hindustan Petroleum", getDrawable(R.drawable.hindustanpetroleum));
         infos.put("Canada", "Capital: Ottawa\n" +
                 "Dialing code: +1\n" +
                 "Currency: Canadian dollar\n" +
                 "Population: 35.16 million (2013) World Bank\n" +
                 "Prime minister: Justin Trudeau\n" +
                 "Provinces: Ontario, British Columbia, Québec, Alberta, more");
-        logos.put("Switzerland", getDrawable(R.drawable.ch));
-        infos.put("Switzerland", "Dialing code: +41\n" +
+        logos.put("PETA", getDrawable(R.drawable.peta));
+        infos.put("PETA", "Dialing code: +41\n" +
                 "Currency: Swiss franc\n" +
                 "Population: 8.081 million (2013) World Bank\n" +
                 "Official languages: French, Romansh, German, Italian\n" +
                 "Colleges and Universities: ETH Zurich, more");
-        logos.put("Cyprus", getDrawable(R.drawable.cy));
-        infos.put("Cyprus", "Capital: Nicosia\n" +
+        logos.put("Indian Post", getDrawable(R.drawable.indian_post));
+        infos.put("Indian Post", "Capital: Nicosia\n" +
                 "Dialing code: +357\n" +
                 "Currency: Euro\n" +
                 "Official languages: Turkish, Greek\n" +
                 "Colleges and Universities: University of Cyprus, more");
-        logos.put("China", getDrawable(R.drawable.cn));
-        infos.put("China", "Capital: Beijing\n" +
+        logos.put("Indian Oil", getDrawable(R.drawable.indianoil));
+        infos.put("Indian Oil", "Capital: Beijing\n" +
                 "Dialing code: +86\n" +
                 "Currency: Renminbi\n" +
                 "Population: 1.357 billion (2013) World Bank\n" +
                 "President: Xi Jinping");
-       /* logos.put("Germany", getDrawable(R.drawable.de));
-        logos.put("France", getDrawable(R.drawable.fr));
-        logos.put("Spain", getDrawable(R.drawable.es));
-        logos.put("India", getDrawable(R.drawable.in));
-        logos.put("Japan", getDrawable(R.drawable.jp));
-        logos.put("North Korea", getDrawable(R.drawable.kp));
-        logos.put("South Korea", getDrawable(R.drawable.kr));
-        logos.put("Sri Lanka", getDrawable(R.drawable.lk));
-        logos.put("Malaysia", getDrawable(R.drawable.my));
-        logos.put("Mexico", getDrawable(R.drawable.mx));
-        logos.put("Nigeria", getDrawable(R.drawable.ng));
-        logos.put("Nepal", getDrawable(R.drawable.np));
-        logos.put("New Zealand", getDrawable(R.drawable.nz));
-        logos.put("Pakistan", getDrawable(R.drawable.pk));*/
-
         keysAsArray = new ArrayList<String>(logos.keySet());
 
         key = keysAsArray.get(generator.nextInt(keysAsArray.size()));
@@ -209,7 +194,7 @@ public class Mapper extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!keysAsArray.isEmpty()) {
+                if(!keysAsArray.isEmpty()) {
                     mText.setText("");
                     skipBtn.setEnabled(Boolean.TRUE);
                     tStart = System.currentTimeMillis();
@@ -217,18 +202,19 @@ public class Mapper extends AppCompatActivity {
                     logo.setImageDrawable(logos.get(key));
                     mSubmit.setEnabled(Boolean.TRUE);
                     nextBtn.setEnabled(Boolean.FALSE);
-                } else {
+                }
+                else
+                {
                     //Start an activity
                 }
 
             }
         });
 
-        //Info Button Action
         infoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(GovtOrg.this);
                 builder.setMessage(infos.get(key))
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -241,7 +227,6 @@ public class Mapper extends AppCompatActivity {
             }
         });
 
-        //Skip Button Action
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -253,7 +238,6 @@ public class Mapper extends AppCompatActivity {
             }
         });
 
-        //Submit Button
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,16 +252,16 @@ public class Mapper extends AppCompatActivity {
                 if (ans != "" || ans != " ") {
                     if (key.equalsIgnoreCase(ans) || (tempKey.equalsIgnoreCase(ans) && tempKey.length() > 1)) {
                         Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_LONG).show();
+                        keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
                         skipBtn.setEnabled(Boolean.FALSE);
                         nextBtn.setEnabled(Boolean.TRUE);
-                        keysAsArray.remove(key);
                         if ((int) elapsedSeconds < 5)
                             score += 10 - ((int) elapsedSeconds + penaltyTime);
                         else
                             score += 5 - penaltyTime;
 
-                    } else if (getCode(key).equals(getCode(ans))) {
+                    } else if (getCode(key).equalsIgnoreCase(getCode(ans)) || key.contains(ans)) {
                         Toast.makeText(getBaseContext(), "Almost Correct Answer!", Toast.LENGTH_SHORT).show();
                         keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
@@ -295,14 +279,16 @@ public class Mapper extends AppCompatActivity {
                             penaltyTime++;
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), "Please provide a valid input", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getBaseContext(), "Please provide valid input", Toast.LENGTH_SHORT).show();
                 }
                 mScore.setText("Score : " + score);
 
 
             }
         });
+
+
+        //logo.setImageDrawable(logos.get("UAE"));
 
 
     }

@@ -39,7 +39,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreen.this, Mapper.class);
+                Intent intent = new Intent(SplashScreen.this, GovtOrg.class);
                 startActivity(intent);
                 finish();
             }
