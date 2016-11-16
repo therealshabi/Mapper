@@ -64,6 +64,82 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
     private TextToSpeech tts;
 
+    public static String getCode(String s) {
+        char[] x = s.toUpperCase().toCharArray();
+
+
+        char firstLetter = x[0];
+
+        //RULE [ 2 ]
+        //Convert letters to numeric code
+        for (int i = 0; i < x.length; i++) {
+            switch (x[i]) {
+                case 'B':
+                case 'F':
+                case 'P':
+                case 'V': {
+                    x[i] = '1';
+                    break;
+                }
+
+                case 'C':
+                case 'G':
+                case 'J':
+                case 'K':
+                case 'Q':
+                case 'S':
+                case 'X':
+                case 'Z': {
+                    x[i] = '2';
+                    break;
+                }
+
+                case 'D':
+                case 'T': {
+                    x[i] = '3';
+                    break;
+                }
+
+                case 'L': {
+                    x[i] = '4';
+                    break;
+                }
+
+                case 'M':
+                case 'N': {
+                    x[i] = '5';
+                    break;
+                }
+
+                case 'R': {
+                    x[i] = '6';
+                    break;
+                }
+
+                default: {
+                    x[i] = '0';
+                    break;
+                }
+            }
+        }
+
+        //Remove duplicates
+        //RULE [ 1 ]
+        String output = "" + firstLetter;
+
+        //RULE [ 3 ]
+        for (int i = 1; i < x.length; i++)
+            if (x[i] != x[i - 1] && x[i] != '0')
+                output += x[i];
+
+        //RULE [ 4 ]
+        //Pad with 0's or truncate
+        output = output + "0000";
+        return output.substring(0, 4);
+    }
+
+
+    //Soundex Algorithm
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -333,14 +409,14 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
-                    builder.setMessage("Congratulation! You have finished the Quiz").setCancelable(false).
+                    builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
                             setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     startActivity(new Intent(Mapper.this,Intermediate.class));
                                 }
                             });
-                    speakOut("Congratulation! You have finished the Quiz");
+                    speakOut("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score);
                     AlertDialog alert = builder.create();
                     alert.show();                }
 
@@ -372,6 +448,8 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                 skipBtn.setEnabled(Boolean.FALSE);
                 nextBtn.setEnabled(Boolean.TRUE);
                 keysAsArray.remove(key);
+                score -= 1;
+                mScore.setText("Score : " + score);
                 Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG).show();
                 speakOut("Correct Answer was " + key);
 
@@ -433,83 +511,6 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         });
 
 
-    }
-
-
-    //Soundex Algorithm
-
-    public static String getCode(String s) {
-        char[] x = s.toUpperCase().toCharArray();
-
-
-        char firstLetter = x[0];
-
-        //RULE [ 2 ]
-        //Convert letters to numeric code
-        for (int i = 0; i < x.length; i++) {
-            switch (x[i]) {
-                case 'B':
-                case 'F':
-                case 'P':
-                case 'V': {
-                    x[i] = '1';
-                    break;
-                }
-
-                case 'C':
-                case 'G':
-                case 'J':
-                case 'K':
-                case 'Q':
-                case 'S':
-                case 'X':
-                case 'Z': {
-                    x[i] = '2';
-                    break;
-                }
-
-                case 'D':
-                case 'T': {
-                    x[i] = '3';
-                    break;
-                }
-
-                case 'L': {
-                    x[i] = '4';
-                    break;
-                }
-
-                case 'M':
-                case 'N': {
-                    x[i] = '5';
-                    break;
-                }
-
-                case 'R': {
-                    x[i] = '6';
-                    break;
-                }
-
-                default: {
-                    x[i] = '0';
-                    break;
-                }
-            }
-        }
-
-        //Remove duplicates
-        //RULE [ 1 ]
-        String output = "" + firstLetter;
-
-        //RULE [ 3 ]
-        for (int i = 1; i < x.length; i++)
-            if (x[i] != x[i - 1] && x[i] != '0')
-                output += x[i];
-
-        //RULE [ 4 ]
-        //Pad with 0's or truncate
-        output = output + "0000";
-        return output.substring(0, 4);
     }
 
     @Override
