@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@drawable/ic_flag"
+        android:icon="@mipmap/map"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"

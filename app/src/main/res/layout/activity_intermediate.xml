@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/category_selector"
         android:elevation="8dp"
         android:foreground="@drawable/ripple"
@@ -47,12 +47,24 @@
         android:id="@+id/about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/govt"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/category_selector"
         android:elevation="8dp"
         android:foreground="@drawable/ripple"
         android:padding="16dp"
         android:text="@string/about_category"
         android:textColor="@android:color/white" />
+
+    <ToggleButton
+        android:id="@+id/toggleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toggle_selector"
+        android:drawableLeft="@drawable/ic_headset_black_24dp"
+        android:elevation="8dp"
+        android:foreground="@drawable/ripple"
+        android:padding="16dp"
+        android:textOff=" Sound OFF"
+        android:textOn=" Sound ON" />
 
 </LinearLayout>

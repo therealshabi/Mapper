@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_flag" />
+        android:src="@mipmap/flag" />
 
     <TextView
         android:id="@+id/appName"
