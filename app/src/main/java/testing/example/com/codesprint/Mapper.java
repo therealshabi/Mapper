@@ -7,8 +7,11 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -27,10 +30,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
+import static android.widget.Toast.makeText;
+
 public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitListener {
     public static final String MyPREFERENCES = "MyPrefs";
     EditText mText;
     TextView mScore;
+    TextView mTimer;
     Button nextBtn;
     Button skipBtn;
     ImageButton infoBtn;
@@ -40,12 +46,31 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
     String key = "";
     int score = 0;
     int penaltyTime = 0;
+
+    private boolean pause;
+
+
+    long starttime = 0L;
+    long timeInMilliseconds = 0L;
+    long timeSwapBuff = 0L;
+    long updatedtime = 0L;
+    int t = 1;
+    int secs = 0;
+    int mins = 0;
+    int milliseconds = 0;
+    Handler handler = new Handler();
+
+    Toast toast;
+
     HashMap<String, Integer> logos = new HashMap<>();
     HashMap<String, String> infos = new HashMap<>();
     ArrayList<String> keysAsArray;
+
     boolean toggleState;
+
     SharedPreferences sharedPref;
     private TextToSpeech tts;
+    public int timeRemaining = 50000;
 
     public static String getCode(String s) {
         char[] x = s.toUpperCase().toCharArray();
@@ -160,10 +185,12 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         logo = (ImageView) findViewById(R.id.logo);
         mSubmit = (Button) findViewById(R.id.submit);
         final Random generator = new Random();
+        mTimer = (TextView) findViewById(R.id.timer);
 
         tts = new TextToSpeech(this, this);
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.7f);
+
 
         sharedPref = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         toggleState = Boolean.parseBoolean(getResources().getString(R.string.toggleState));
@@ -329,17 +356,39 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         logos.put("New Zealand", getDrawable(R.drawable.nz));
         logos.put("Pakistan", getDrawable(R.drawable.pk));*/
 
+
         keysAsArray = new ArrayList<String>(logos.keySet());
 
         key = keysAsArray.get(generator.nextInt(keysAsArray.size()));
         logo.setImageBitmap(decodeSampledBitmapFromResource(getResources(), logos.get(key), 130, 130));
+
+        //Condition For Timer Start
+        if (t == 1) {
+
+//timer will start
+            starttime = SystemClock.uptimeMillis();
+            handler.postDelayed(updateTimer, 0);
+            t = 0;
+        }
+        //Condition For Timer Pause
+        else {
+//timer will pause
+            mTimer.setTextColor(Color.BLUE);
+            timeSwapBuff += timeInMilliseconds;
+            handler.removeCallbacks(updateTimer);
+            t = 1;
+        }
 
         nextBtn.setEnabled(Boolean.FALSE);
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//pause will be false when skip button is called as we want to resume our timer right away
+                if (pause == true) {
+                    starttime = SystemClock.uptimeMillis();
+                    handler.postDelayed(updateTimer, 0);
+                }
                 if (!keysAsArray.isEmpty()) {
                     mText.setText("");
                     skipBtn.setEnabled(Boolean.TRUE);
@@ -349,6 +398,23 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     mSubmit.setEnabled(Boolean.TRUE);
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
+
+                    score -= ((secs + (mins * 60)) / 15) * 3;
+                    if (score < 0) {
+                        score = 0;
+                    }
+
+                    starttime = 0L;
+                    timeInMilliseconds = 0L;
+                    timeSwapBuff = 0L;
+                    updatedtime = 0L;
+                    t = 1;
+                    secs = 0;
+                    mins = 0;
+                    milliseconds = 0;
+                    handler.removeCallbacks(updateTimer);
+                    mTimer.setText("TIMER - 0:00");
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
                     builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
                             setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -388,13 +454,26 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pause = false;
                 mSubmit.setEnabled(Boolean.FALSE);
                 skipBtn.setEnabled(Boolean.FALSE);
                 nextBtn.setEnabled(Boolean.TRUE);
                 keysAsArray.remove(key);
                 score -= 1;
+                if (score < 0) {
+                    score = 0;
+                }
                 mScore.setText("Score : " + score);
-                Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG).show();
+                toast = Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_SHORT);
+                toast.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast.cancel();
+                    }
+                }, 1000);
+
                 if (toggleState) {
                     speakOut("Correct Answer was " + key);
                 }
@@ -416,7 +495,24 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
                 if (!ans.equals("") && !ans.equals(" ")) {
                     if (key.equalsIgnoreCase(ans) || (tempKey.equalsIgnoreCase(ans) && tempKey.length() > 1)) {
-                        Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_LONG).show();
+
+                        t = 0;
+                        pause = true;
+                        mTimer.setTextColor(Color.BLUE);
+                        timeSwapBuff += timeInMilliseconds;
+                        handler.removeCallbacks(updateTimer);
+                        t = 1;
+
+                        toast = Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel();
+                            }
+                        }, 1000);
+
                         mSubmit.setEnabled(Boolean.FALSE);
                         skipBtn.setEnabled(Boolean.FALSE);
                         nextBtn.setEnabled(Boolean.TRUE);
@@ -431,7 +527,23 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                         }
 
                     } else if (getCode(key).equals(getCode(ans)) && ans.length() > 1) {
-                        Toast.makeText(getBaseContext(), "Almost Correct Answer!", Toast.LENGTH_SHORT).show();
+                        toast = makeText(getBaseContext(), "Almost! Correct Answer is " + key, Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel();
+                            }
+                        }, 1000);
+
+                        t = 0;
+                        pause = true;
+                        mTimer.setTextColor(Color.BLUE);
+                        timeSwapBuff += timeInMilliseconds;
+                        handler.removeCallbacks(updateTimer);
+                        t = 1;
+
                         keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
                         skipBtn.setEnabled(Boolean.FALSE);
@@ -446,7 +558,15 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                         }
 
                     } else {
-                        Toast.makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT).show();
+                        toast = makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel();
+                            }
+                        }, 1000);
                         score += -1;
                         if (penaltyTime < 4)
                             penaltyTime++;
@@ -457,8 +577,19 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), "Please provide a valid input", Toast.LENGTH_SHORT).show();
+                    toast = makeText(getBaseContext(), "Please provide a valid input", Toast.LENGTH_SHORT);
+                    toast.show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            toast.cancel();
+                        }
+                    }, 1000);
 
+                }
+                if (score < 0) {
+                    score = 0;
                 }
                 mScore.setText("Score : " + score);
             }
@@ -495,4 +626,17 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         super.onBackPressed();
         finish();
     }
+
+    public Runnable updateTimer = new Runnable() {
+        public void run() {
+            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
+            updatedtime = timeSwapBuff + timeInMilliseconds;
+            secs = (int) (updatedtime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            mTimer.setText("TIMER - " + mins + ":" + String.format("%02d", secs));
+            mTimer.setTextColor(Color.RED);
+            handler.postDelayed(this, 0);
+        }
+    };
 }
