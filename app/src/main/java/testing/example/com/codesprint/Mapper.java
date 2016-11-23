@@ -44,7 +44,6 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
     long tStart;
     String key = "";
     int score = 0;
-    int penaltyTime = 0;
 
     private boolean pause;
 
@@ -190,6 +189,8 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         tts = new TextToSpeech(this, this);
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.7f);
+
+        toggleState = SharedPreferenceUtils.getToggleStatus(getBaseContext(),toggleState);
 
 
         logos.put("Andorra", R.drawable.ad);

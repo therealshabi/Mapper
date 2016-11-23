@@ -12,9 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
+import testing.example.com.codesprint.Utils.SharedPreferenceUtils;
+
 public class Intermediate extends Activity {
 
-    public static final String MyPREFERENCES = "MyPrefs";
     Button mFlags;
     Button mOrg;
     Button mAbout;
@@ -22,7 +23,6 @@ public class Intermediate extends Activity {
     Button mHighScores;
     ToggleButton toggle;
     boolean toggleState;
-    SharedPreferences sharedPref;
 
 
     @Override
@@ -30,7 +30,6 @@ public class Intermediate extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intermediate);
 
-        sharedPref = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         mFlags = (Button) findViewById(R.id.flags);
         mOrg = (Button) findViewById(R.id.govt);
@@ -77,7 +76,8 @@ public class Intermediate extends Activity {
             }
         });
 
-        if (!sharedPref.getBoolean(getString(R.string.toggleState), toggleState)) {
+        toggleState = SharedPreferenceUtils.getToggleStatus(getBaseContext(),toggleState);
+        if (!toggleState) {
             toggle.setChecked(Boolean.FALSE);
         } else {
             toggle.setChecked(Boolean.TRUE);
@@ -88,15 +88,11 @@ public class Intermediate extends Activity {
             public void onClick(View v) {
                 if (toggle.isChecked()) {
                     toggleState = true;
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean(getString(R.string.toggleState), toggleState);
-                    editor.apply();
+                    SharedPreferenceUtils.setToggleStatus(getBaseContext(),toggleState);
 
                 } else {
                     toggleState = false;
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean(getString(R.string.toggleState), toggleState);
-                    editor.apply();
+                    SharedPreferenceUtils.setToggleStatus(getBaseContext(),toggleState);
                 }
             }
         });

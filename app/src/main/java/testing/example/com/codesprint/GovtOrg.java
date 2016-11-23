@@ -43,7 +43,6 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
     long tStart;
     String key = "";
     int score = 0;
-    int penaltyTime = 0;
     HashMap<String, Integer> logos = new HashMap<>();
     HashMap<String, String> infos = new HashMap<>();
     ArrayList<String> keysAsArray;
@@ -187,6 +186,8 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
         mSubmit = (Button) findViewById(R.id.submit);
         mTimer = (TextView) findViewById(R.id.timer);
         final Random generator = new Random();
+
+        toggleState = SharedPreferenceUtils.getToggleStatus(getBaseContext(),toggleState);
 
 
         logos.put("Delhi Metro", R.drawable.metro);
