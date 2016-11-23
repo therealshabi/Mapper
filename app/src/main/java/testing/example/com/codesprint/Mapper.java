@@ -71,6 +71,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
     SharedPreferences sharedPref;
     private TextToSpeech tts;
     public int timeRemaining = 50000;
+    int size;
 
     public static String getCode(String s) {
         char[] x = s.toUpperCase().toCharArray();
@@ -358,6 +359,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
 
         keysAsArray = new ArrayList<String>(logos.keySet());
+        size = keysAsArray.size();
 
         key = keysAsArray.get(generator.nextInt(keysAsArray.size()));
         logo.setImageBitmap(decodeSampledBitmapFromResource(getResources(), logos.get(key), 130, 130));
@@ -399,7 +401,12 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
 
-                    score -= ((secs + (mins * 60)) / 15) * 3;
+                    int temp = (secs + (mins * 60));
+
+                    if (temp > size * 10) {
+                        //10 seconds max per question and 3 marks deducted for each violation
+                        score -= (temp / 10) * 3;
+                    }
                     if (score < 0) {
                         score = 0;
                     }
@@ -413,7 +420,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     mins = 0;
                     milliseconds = 0;
                     handler.removeCallbacks(updateTimer);
-                    mTimer.setText("TIMER - 0:00");
+                    mTimer.setText("0:00");
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
                     builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
@@ -634,9 +641,58 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
             secs = (int) (updatedtime / 1000);
             mins = secs / 60;
             secs = secs % 60;
-            mTimer.setText("TIMER - " + mins + ":" + String.format("%02d", secs));
+            mTimer.setText("" + mins + ":" + String.format("%02d", secs));
+            //Game Over if you take more than 5 minutes
+            if (mins * 60 + secs > 300) {
+                handler.removeCallbacks(updateTimer);
+                handler.postDelayed(last, 0);
+
+            }
+
             mTimer.setTextColor(Color.RED);
             handler.postDelayed(this, 0);
+        }
+    };
+
+    Runnable last = new Runnable() {
+        @Override
+        public void run() {
+            starttime = 0L;
+            timeInMilliseconds = 0L;
+            timeSwapBuff = 0L;
+            updatedtime = 0L;
+            t = 1;
+            secs = 0;
+            mins = 0;
+            milliseconds = 0;
+            handler.removeCallbacks(updateTimer);
+            mTimer.setText("0:00");
+
+            int temp = (secs + (mins * 60));
+
+            if (temp > size * 10) {
+                //10 seconds max per question and 3 marks deducted for each violation
+                score -= Math.round((temp / 10) * 3);
+            }
+            if (score < 0) {
+                score = 0;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
+            builder.setMessage("Sorry! Times Up.\n" + "Your Final Score is " + score).setCancelable(false).
+                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Mapper.this, Intermediate.class));
+                        }
+                    });
+            if (toggleState) {
+                speakOut("Sorry! Times Up." + "Your Final Score is " + score);
+            }
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            handler.removeCallbacks(this);
         }
     };
 }

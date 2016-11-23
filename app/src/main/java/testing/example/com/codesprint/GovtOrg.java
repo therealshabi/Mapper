@@ -65,6 +65,10 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
     private TextView mTimer;
     private Toast toast;
 
+    int size = 0;
+
+
+    //Soundex Algorithm
     public static String getCode(String s) {
         char[] x = s.toUpperCase().toCharArray();
 
@@ -138,9 +142,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
         return output.substring(0, 4);
     }
 
-
-    //Soundex Algorithm
-
+    //Bitmap Size reduction
     static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -275,6 +277,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                 "It is the leading Indian Corporate in Fortune’s prestigious ‘Global 500’ listing of world’s largest corporates at 161st position for the year 2016.");
 
         keysAsArray = new ArrayList<String>(logos.keySet());
+        size = keysAsArray.size();
 
         key = keysAsArray.get(generator.nextInt(keysAsArray.size()));
         logo.setImageBitmap(decodeSampledBitmapFromResource(getResources(), logos.get(key), 130, 130));
@@ -319,7 +322,13 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
 
-                    score -= ((secs + (mins * 60)) / 15) * 3;
+
+                    int temp = (secs + (mins * 60));
+
+                    if (temp > size * 10) {
+                        //10 seconds max per question and 3 marks deducted for each violation
+                        score -= (temp / 10) * 3;
+                    }
                     if (score < 0) {
                         score = 0;
                     }
@@ -333,7 +342,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     mins = 0;
                     milliseconds = 0;
                     handler.removeCallbacks(updateTimer);
-                    mTimer.setText("TIMER - 0:00");
+                    mTimer.setText("0:00");
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(GovtOrg.this);
                     builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
@@ -381,7 +390,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     score = 0;
                 }
                 mScore.setText("Score : " + score);
-                toast =Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG);
+                toast = Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG);
                 toast.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -488,7 +497,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                             penaltyTime++;
                     }
                 } else {
-                    toast=Toast.makeText(getBaseContext(), "Please provide valid input", Toast.LENGTH_SHORT);
+                    toast = Toast.makeText(getBaseContext(), "Please provide valid input", Toast.LENGTH_SHORT);
                     toast.show();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -542,10 +551,62 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
             secs = (int) (updatedtime / 1000);
             mins = secs / 60;
             secs = secs % 60;
-            mTimer.setText("TIMER - " + mins + ":" + String.format("%02d", secs));
+            mTimer.setText("" + mins + ":" + String.format("%02d", secs));
+
+            //Game Over if you take more than 5 minutes
+            if (mins * 60 + secs > 300) {
+
+                handler.removeCallbacks(updateTimer);
+                handler.postDelayed(last, 0);
+
+
+            }
             mTimer.setTextColor(Color.RED);
             handler.postDelayed(this, 0);
         }
     };
+
+    Runnable last = new Runnable() {
+        @Override
+        public void run() {
+            starttime = 0L;
+            timeInMilliseconds = 0L;
+            timeSwapBuff = 0L;
+            updatedtime = 0L;
+            t = 1;
+            secs = 0;
+            mins = 0;
+            milliseconds = 0;
+            handler.removeCallbacks(updateTimer);
+            mTimer.setText("0:00");
+
+            int temp = (secs + (mins * 60));
+
+            if (temp > size * 10) {
+                //10 seconds max per question and 3 marks deducted for each violation
+                score -= Math.round((temp / 10) * 3);
+            }
+            if (score < 0) {
+                score = 0;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(GovtOrg.this);
+            builder.setMessage("Sorry! Times Up.\n" + "Your Final Score is " + score).setCancelable(false).
+                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(GovtOrg.this, Intermediate.class));
+                        }
+                    });
+            if (toggleState) {
+                speakOut("Sorry! Times Up." + "Your Final Score is " + score);
+            }
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            handler.removeCallbacks(this);
+        }
+    };
+
 
 }

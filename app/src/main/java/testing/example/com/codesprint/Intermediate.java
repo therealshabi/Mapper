@@ -31,6 +31,8 @@ public class Intermediate extends AppCompatActivity {
         toggle = (ToggleButton) findViewById(R.id.toggleButton);
 
 
+
+
         mFlags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
