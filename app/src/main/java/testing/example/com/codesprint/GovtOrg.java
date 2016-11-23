@@ -1,9 +1,7 @@
 package testing.example.com.codesprint;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,8 +28,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
+import testing.example.com.codesprint.Utils.SharedPreferenceUtils;
+
+import static android.widget.Toast.makeText;
+
 public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitListener {
-    public static final String MyPREFERENCES = "MyPrefs";
     EditText mText;
     TextView mScore;
     Button nextBtn;
@@ -47,8 +48,9 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
     HashMap<String, String> infos = new HashMap<>();
     ArrayList<String> keysAsArray;
     boolean toggleState;
-    SharedPreferences sharedPref;
     private TextToSpeech tts;
+
+    int high = 0;
 
     private boolean pause;
 
@@ -175,6 +177,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.7f);
 
+
         mText = (EditText) findViewById(R.id.txt);
         mScore = (TextView) findViewById(R.id.score);
         nextBtn = (Button) findViewById(R.id.nextBtn);
@@ -185,9 +188,6 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
         mTimer = (TextView) findViewById(R.id.timer);
         final Random generator = new Random();
 
-        sharedPref = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        toggleState = Boolean.parseBoolean(getResources().getString(R.string.toggleState));
-        toggleState = sharedPref.getBoolean(getString(R.string.toggleState), toggleState);
 
         logos.put("Delhi Metro", R.drawable.metro);
         infos.put("Delhi Metro", "This Railway system is serving Delhi and National Capital Region in India.\n" +
@@ -306,12 +306,11 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//pause will be false when skip button is called as we want to resume our timer right away
                 if (pause == true) {
                     starttime = SystemClock.uptimeMillis();
                     handler.postDelayed(updateTimer, 0);
                 }
-
                 if (!keysAsArray.isEmpty()) {
                     mText.setText("");
                     skipBtn.setEnabled(Boolean.TRUE);
@@ -322,12 +321,11 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     nextBtn.setEnabled(Boolean.FALSE);
                 } else {
 
-
                     int temp = (secs + (mins * 60));
 
                     if (temp > size * 10) {
                         //10 seconds max per question and 3 marks deducted for each violation
-                        score -= (temp / 10) * 3;
+                        score -= Math.round(((temp - (size * 10)) / 10) * 3);
                     }
                     if (score < 0) {
                         score = 0;
@@ -344,6 +342,10 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     handler.removeCallbacks(updateTimer);
                     mTimer.setText("0:00");
 
+                    if (score > high) {
+                        SharedPreferenceUtils.setHighScoreOrg(getBaseContext(), score);
+                    }
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(GovtOrg.this);
                     builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
                             setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -352,6 +354,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                                     startActivity(new Intent(GovtOrg.this, Intermediate.class));
                                 }
                             });
+
                     if (toggleState) {
                         speakOut("Congratulations! You have finished the Quiz." + "Your Final Score is " + score);
                     }
@@ -378,9 +381,11 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
             }
         });
 
+        //Skip Button Action
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pause = false;
                 mSubmit.setEnabled(Boolean.FALSE);
                 skipBtn.setEnabled(Boolean.FALSE);
                 nextBtn.setEnabled(Boolean.TRUE);
@@ -390,7 +395,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     score = 0;
                 }
                 mScore.setText("Score : " + score);
-                toast = Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_LONG);
+                toast = Toast.makeText(getBaseContext(), "Correct Answer was " + key, Toast.LENGTH_SHORT);
                 toast.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -400,13 +405,14 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     }
                 }, 1000);
 
-
                 if (toggleState) {
                     speakOut("Correct Answer was " + key);
                 }
+
             }
         });
 
+        //Submit Button
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -420,7 +426,15 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
 
                 if (!ans.equals("") && !ans.equals(" ")) {
                     if (key.equalsIgnoreCase(ans) || (tempKey.equalsIgnoreCase(ans) && tempKey.length() > 1)) {
-                        toast = Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_LONG);
+
+                        t = 0;
+                        pause = true;
+                        mTimer.setTextColor(Color.BLUE);
+                        timeSwapBuff += timeInMilliseconds;
+                        handler.removeCallbacks(updateTimer);
+                        t = 1;
+
+                        toast = Toast.makeText(getBaseContext(), "Correct Answer!", Toast.LENGTH_SHORT);
                         toast.show();
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -430,36 +444,17 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                             }
                         }, 1000);
 
-                        t = 0;
-                        pause = true;
-                        mTimer.setTextColor(Color.BLUE);
-                        timeSwapBuff += timeInMilliseconds;
-                        handler.removeCallbacks(updateTimer);
-                        t = 1;
-
-                        keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
                         skipBtn.setEnabled(Boolean.FALSE);
                         nextBtn.setEnabled(Boolean.TRUE);
-                        if ((int) elapsedSeconds < 5)
-                            score += 10 - ((int) elapsedSeconds + penaltyTime);
-                        else
-                            score += 5 - penaltyTime;
+                        keysAsArray.remove(key);
+                        score += 5;
 
                         if (toggleState) {
                             speakOut("Good! Correct Answer is " + key);
                         }
-                    } else if (getCode(key).equalsIgnoreCase(getCode(ans)) || key.contains(ans) && ans.length() > 1) {
-                        toast = Toast.makeText(getBaseContext(), "Almost! Correct Answer is " + key, Toast.LENGTH_SHORT);
-                        toast.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                toast.cancel();
-                            }
-                        }, 1000);
 
+                    } else if (getCode(key).equals(getCode(ans)) && ans.length() > 1) {
                         t = 0;
                         pause = true;
                         mTimer.setTextColor(Color.BLUE);
@@ -467,20 +462,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                         handler.removeCallbacks(updateTimer);
                         t = 1;
 
-                        keysAsArray.remove(key);
-                        mSubmit.setEnabled(Boolean.FALSE);
-                        skipBtn.setEnabled(Boolean.FALSE);
-                        nextBtn.setEnabled(Boolean.TRUE);
-                        if ((int) elapsedSeconds < 5)
-                            score += 9 - ((int) elapsedSeconds + penaltyTime);
-                        else
-                            score += 4 - penaltyTime;
-
-                        if (toggleState) {
-                            speakOut("Almost! Correct Answer is " + key);
-                        }
-                    } else {
-                        toast = Toast.makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT);
+                        toast = makeText(getBaseContext(), "Almost! Correct Answer is " + key, Toast.LENGTH_SHORT);
                         toast.show();
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -489,15 +471,37 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                                 toast.cancel();
                             }
                         }, 1000);
+
+
+                        keysAsArray.remove(key);
+                        mSubmit.setEnabled(Boolean.FALSE);
+                        skipBtn.setEnabled(Boolean.FALSE);
+                        nextBtn.setEnabled(Boolean.TRUE);
+
+                        score += 3;
+
+                        if (toggleState) {
+                            speakOut("Almost! Correct Answer is " + key);
+                        }
+
+                    } else {
+                        toast = makeText(getBaseContext(), "Hard Luck, Try Again!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                toast.cancel();
+                            }
+                        }, 1000);
+                        score += -1;
                         if (toggleState) {
                             speakOut("Hard Luck, Try Again!");
                         }
-                        score += -1;
-                        if (penaltyTime < 4)
-                            penaltyTime++;
+
                     }
                 } else {
-                    toast = Toast.makeText(getBaseContext(), "Please provide valid input", Toast.LENGTH_SHORT);
+                    toast = makeText(getBaseContext(), "Please provide a valid input", Toast.LENGTH_SHORT);
                     toast.show();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -506,13 +510,12 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                             toast.cancel();
                         }
                     }, 1000);
+
                 }
                 if (score < 0) {
                     score = 0;
                 }
                 mScore.setText("Score : " + score);
-
-
             }
         });
 
@@ -584,7 +587,7 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
 
             if (temp > size * 10) {
                 //10 seconds max per question and 3 marks deducted for each violation
-                score -= Math.round((temp / 10) * 3);
+                score -= Math.round(((temp - (size * 10)) / 10) * 3);
             }
             if (score < 0) {
                 score = 0;
@@ -600,6 +603,9 @@ public class GovtOrg extends AppCompatActivity implements TextToSpeech.OnInitLis
                     });
             if (toggleState) {
                 speakOut("Sorry! Times Up." + "Your Final Score is " + score);
+            }
+            if (score > high) {
+                SharedPreferenceUtils.setHighScoreOrg(getBaseContext(), score);
             }
             AlertDialog alert = builder.create();
             alert.show();

@@ -15,4 +15,14 @@
     </string>
     <string name="Version">Version 1.0.2</string>
     <string name="toggleState">false</string>
+    <string name="help_category">Help</string>
+    <string name="help_heading">Mapper How to Play</string>
+    <string name="help">
+    1.) For Each Question, the player will get 10 seconds and 5 points for each correct answer, 3 points for each Almost Correct answer and -1 points will be deducted for incorrect answer. \n
+    2.) At the end if the total time taken by the player is greater than the total time calculated by the formula total questions * 10 seconds per question, then for per
+        extra 10 seconds your 3 points will be deducted.\n
+    3.) You can choose to play the sound or mute it.\n
+    4.) The timer will be paused once you submit a question successfully after that you can read the question\'s info and all.\n
+    5.) Maximum time to finish the game is 5 minutes, after which the game will be over.\n
+    </string>
 </resources>

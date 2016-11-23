@@ -35,7 +35,9 @@
         <activity
             android:name=".About"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Help" />
+        <activity android:name=".HighScores"></activity>
     </application>
 
 </manifest>

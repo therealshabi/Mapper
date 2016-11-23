@@ -1,9 +1,7 @@
 package testing.example.com.codesprint;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,10 +28,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
+import testing.example.com.codesprint.Utils.SharedPreferenceUtils;
+
 import static android.widget.Toast.makeText;
 
 public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitListener {
-    public static final String MyPREFERENCES = "MyPrefs";
     EditText mText;
     TextView mScore;
     TextView mTimer;
@@ -68,10 +67,9 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
     boolean toggleState;
 
-    SharedPreferences sharedPref;
     private TextToSpeech tts;
-    public int timeRemaining = 50000;
     int size;
+    int high = 0;
 
     public static String getCode(String s) {
         char[] x = s.toUpperCase().toCharArray();
@@ -188,14 +186,11 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
         final Random generator = new Random();
         mTimer = (TextView) findViewById(R.id.timer);
 
+
         tts = new TextToSpeech(this, this);
         tts.setLanguage(Locale.UK);
         tts.setSpeechRate(0.7f);
 
-
-        sharedPref = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        toggleState = Boolean.parseBoolean(getResources().getString(R.string.toggleState));
-        toggleState = sharedPref.getBoolean(getString(R.string.toggleState), toggleState);
 
         logos.put("Andorra", R.drawable.ad);
         infos.put("Andorra", "Capital: ______ la Vella\n" +
@@ -405,7 +400,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
                     if (temp > size * 10) {
                         //10 seconds max per question and 3 marks deducted for each violation
-                        score -= (temp / 10) * 3;
+                        score -= Math.round(((temp - (size * 10)) / 10) * 3);
                     }
                     if (score < 0) {
                         score = 0;
@@ -422,6 +417,10 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                     handler.removeCallbacks(updateTimer);
                     mTimer.setText("0:00");
 
+                    if (score > high) {
+                        SharedPreferenceUtils.setHighScoreFlag(getBaseContext(), score);
+                    }
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(Mapper.this);
                     builder.setMessage("Congratulations! You have finished the Quiz.\n" + "Your Final Score is " + score).setCancelable(false).
                             setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -430,6 +429,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                                     startActivity(new Intent(Mapper.this, Intermediate.class));
                                 }
                             });
+
                     if (toggleState) {
                         speakOut("Congratulations! You have finished the Quiz." + "Your Final Score is " + score);
                     }
@@ -524,16 +524,21 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                         skipBtn.setEnabled(Boolean.FALSE);
                         nextBtn.setEnabled(Boolean.TRUE);
                         keysAsArray.remove(key);
-                        if ((int) elapsedSeconds < 5)
-                            score += 10 - ((int) elapsedSeconds + penaltyTime);
-                        else
-                            score += 5 - penaltyTime;
+                        score += 5;
 
                         if (toggleState) {
                             speakOut("Good! Correct Answer is " + key);
                         }
 
                     } else if (getCode(key).equals(getCode(ans)) && ans.length() > 1) {
+
+                        t = 0;
+                        pause = true;
+                        mTimer.setTextColor(Color.BLUE);
+                        timeSwapBuff += timeInMilliseconds;
+                        handler.removeCallbacks(updateTimer);
+                        t = 1;
+
                         toast = makeText(getBaseContext(), "Almost! Correct Answer is " + key, Toast.LENGTH_SHORT);
                         toast.show();
                         Handler handler = new Handler();
@@ -544,21 +549,12 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                             }
                         }, 1000);
 
-                        t = 0;
-                        pause = true;
-                        mTimer.setTextColor(Color.BLUE);
-                        timeSwapBuff += timeInMilliseconds;
-                        handler.removeCallbacks(updateTimer);
-                        t = 1;
 
                         keysAsArray.remove(key);
                         mSubmit.setEnabled(Boolean.FALSE);
                         skipBtn.setEnabled(Boolean.FALSE);
                         nextBtn.setEnabled(Boolean.TRUE);
-                        if ((int) elapsedSeconds < 5)
-                            score += 9 - ((int) elapsedSeconds + penaltyTime);
-                        else
-                            score += 4 - penaltyTime;
+                        score += 3;
 
                         if (toggleState) {
                             speakOut("Almost! Correct Answer is " + key);
@@ -575,8 +571,6 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
                             }
                         }, 1000);
                         score += -1;
-                        if (penaltyTime < 4)
-                            penaltyTime++;
 
                         if (toggleState) {
                             speakOut("Hard Luck, Try Again!");
@@ -672,7 +666,7 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
 
             if (temp > size * 10) {
                 //10 seconds max per question and 3 marks deducted for each violation
-                score -= Math.round((temp / 10) * 3);
+                score -= Math.round(((temp - (size * 10)) / 10) * 3);
             }
             if (score < 0) {
                 score = 0;
@@ -689,6 +683,11 @@ public class Mapper extends AppCompatActivity implements TextToSpeech.OnInitList
             if (toggleState) {
                 speakOut("Sorry! Times Up." + "Your Final Score is " + score);
             }
+
+            if (score > high) {
+                SharedPreferenceUtils.setHighScoreFlag(getBaseContext(), score);
+            }
+
             AlertDialog alert = builder.create();
             alert.show();
 
